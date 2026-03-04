@@ -1,0 +1,31 @@
+# Copyright 2026 dah4k
+# SPDX-License-Identifier: EPL-2.0
+
+FROM debian:13
+
+## FIXME: Restore man-pages and other documentation
+
+ARG DEBIAN_FRONTEND=noninteractive
+ARG TZ=Etc/UTC
+RUN apt-get update \
+        --quiet=2 --assume-yes --no-install-recommends \
+    && apt-get install \
+        --quiet=2 --assume-yes --no-install-recommends \
+            curl \
+            dirmngr \
+            gnupg \
+    && apt-get clean \
+    && rm -rf /var/cache/apt/* /var/lib/apt/lists/*
+
+## Create user
+ARG USERNAME=kali
+RUN groupadd --gid 1000 ${USERNAME} \
+ && useradd --create-home --home-dir /home/${USERNAME} --uid 1000 --gid 1000 ${USERNAME}
+
+COPY --chown=1000:1000 files/bashrc /home/${USERNAME}/.bashrc
+COPY --chown=1000:1000 files/alias /home/${USERNAME}/.alias
+
+USER ${USERNAME}
+
+WORKDIR /home/${USERNAME}
+
