@@ -3,8 +3,6 @@
 
 FROM debian:13
 
-## FIXME: Restore man-pages and other documentation
-
 ARG DEBIAN_FRONTEND=noninteractive
 ARG TZ=Etc/UTC
 RUN apt-get update  --quiet=2 --assume-yes --no-install-recommends \
@@ -12,7 +10,12 @@ RUN apt-get update  --quiet=2 --assume-yes --no-install-recommends \
         ca-certificates \
         curl \
         dirmngr \
+        fd-find \
         gnupg2 \
+        less \
+        man-db \
+        manpages \
+        ripgrep \
  && curl https://archive.kali.org/archive-keyring.gpg --output /usr/share/keyrings/kali-archive-keyring.gpg \
  && echo 'deb [signed-by=/usr/share/keyrings/kali-archive-keyring.gpg] https://http.kali.org/kali kali-rolling main non-free contrib' >> /etc/apt/sources.list \
  && apt-get update  --quiet=2 --assume-yes --no-install-recommends \
